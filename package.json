@@ -1,0 +1,72 @@
+{
+	"name": "vinyl-rollup",
+	"version": "0.1.0",
+	"description": "A wrapper for rollup that produces a stream of Vinyl objects.",
+	"main": "index.js",
+	"module": "index.mjs",
+	"scripts": {
+		"prepack": "babel --out-file index.js --source-maps true index.mjs && npm run test:actual",
+		"test": "del-cli index.js index.js.map && nyc npm run test:actual",
+		"test:actual": "xo && ava"
+	},
+	"engines": {
+		"node": ">=8"
+	},
+	"author": "Corey Farrell",
+	"license": "MIT",
+	"files": [
+		"index.*"
+	],
+	"keywords": [
+		"gulp",
+		"gulpplugin",
+		"vinyl",
+		"rollup",
+		"source maps",
+		"sourcemaps"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/cfware/vinyl-rollup.git"
+	},
+	"bugs": {
+		"url": "https://github.com/cfware/vinyl-rollup/issues"
+	},
+	"homepage": "https://github.com/cfware/vinyl-rollup#readme",
+	"dependencies": {
+		"arrify": "^1.0.1",
+		"gulp": "^4.0.0",
+		"merge2": "^1.2.2",
+		"p-map": "^1.2.0",
+		"vinyl": "^2.2.0",
+		"vinyl-fs": "^3.0.3"
+	},
+	"devDependencies": {
+		"@babel/cli": "^7.0.0-beta.51",
+		"@babel/preset-env": "^7.0.0-beta.51",
+		"@babel/register": "^7.0.0-beta.51",
+		"@cfware/nyc": "^0.1.0",
+		"ava": "^1.0.0-beta.6",
+		"babel-plugin-istanbul": "^5.0.0",
+		"concat-stream": "^1.6.2",
+		"del-cli": "^1.1.0",
+		"gulp-sourcemaps": "^2.6.4",
+		"nyc": "^13.0.0",
+		"p-event": "^2.1.0",
+		"pump": "^3.0.0",
+		"rollup": "^0.62.0",
+		"rollup-plugin-node-resolve": "^3.3.0",
+		"xo": "^0.21.1"
+	},
+	"peerDependencies": {
+		"rollup": "^0.62.0"
+	},
+	"nyc": {
+		"extends": "@cfware/nyc/babel-mjs-only"
+	},
+	"xo": {
+		"extensions": [
+			"mjs"
+		]
+	}
+}

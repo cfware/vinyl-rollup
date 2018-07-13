@@ -1,0 +1,7 @@
+{
+	"name": "fake-module",
+	"description": "Local test harness",
+	"private": true,
+	"version": "0.0.0",
+	"main": "index.js"
+}

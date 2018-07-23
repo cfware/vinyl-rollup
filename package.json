@@ -42,10 +42,10 @@
 		"vinyl-fs": "^3.0.3"
 	},
 	"devDependencies": {
-		"@babel/cli": "^7.0.0-beta.51",
-		"@babel/preset-env": "^7.0.0-beta.51",
-		"@babel/register": "^7.0.0-beta.51",
-		"@cfware/nyc": "^0.1.0",
+		"@babel/cli": "7.0.0-beta.51",
+		"@babel/preset-env": "7.0.0-beta.51",
+		"@babel/register": "7.0.0-beta.51",
+		"@cfware/nyc": "^0.2.0",
 		"ava": "^1.0.0-beta.6",
 		"babel-plugin-istanbul": "^5.0.0",
 		"concat-stream": "^1.6.2",
@@ -54,12 +54,12 @@
 		"nyc": "^13.0.0",
 		"p-event": "^2.1.0",
 		"pump": "^3.0.0",
-		"rollup": "^0.62.0",
+		"rollup": "^0.63.4",
 		"rollup-plugin-node-resolve": "^3.3.0",
 		"xo": "^0.21.1"
 	},
 	"peerDependencies": {
-		"rollup": "^0.62.0"
+		"rollup": "^0.63.4"
 	},
 	"nyc": {
 		"extends": "@cfware/nyc/babel-mjs-only"

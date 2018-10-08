@@ -1,3 +1,3 @@
-import value from './import1.js';
+import value from './import1';
 
 console.log(value);

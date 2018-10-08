@@ -37,36 +37,56 @@
 		"arrify": "^1.0.1",
 		"gulp": "^4.0.0",
 		"merge2": "^1.2.2",
-		"p-map": "^1.2.0",
+		"p-map": "^2.0.0",
 		"vinyl": "^2.2.0",
 		"vinyl-fs": "^3.0.3"
 	},
 	"devDependencies": {
-		"@babel/cli": "7.0.0-beta.51",
-		"@babel/preset-env": "7.0.0-beta.51",
-		"@babel/register": "7.0.0-beta.51",
-		"@cfware/nyc": "^0.2.0",
-		"ava": "^1.0.0-beta.6",
-		"babel-plugin-istanbul": "^5.0.0",
+		"@babel/cli": "^7.0.0",
+		"@babel/preset-env": "^7.0.0",
+		"@babel/register": "^7.0.0",
+		"ava": "^1.0.0-beta.8",
+		"babel-plugin-istanbul": "^5.1.0",
 		"concat-stream": "^1.6.2",
 		"del-cli": "^1.1.0",
 		"gulp-sourcemaps": "^2.6.4",
-		"nyc": "^13.0.0",
+		"nyc": "^13.1.0",
 		"p-event": "^2.1.0",
 		"pump": "^3.0.0",
-		"rollup": "^0.63.4",
-		"rollup-plugin-node-resolve": "^3.3.0",
-		"xo": "^0.21.1"
+		"rollup": "^0.66.4",
+		"rollup-plugin-node-resolve": "^3.4.0",
+		"xo": "^0.23.0"
 	},
 	"peerDependencies": {
-		"rollup": "^0.63.4"
+		"rollup": "^0.66.4"
 	},
 	"nyc": {
-		"extends": "@cfware/nyc/babel-mjs-only"
+		"instrument": false,
+		"sourceMap": false,
+		"extension": [
+			".mjs"
+		],
+		"include": [
+			"index.mjs"
+		],
+		"check-coverage": true,
+		"per-file": true,
+		"lines": 100,
+		"statements": 100,
+		"functions": 100,
+		"branches": 100
 	},
 	"xo": {
 		"extensions": [
 			"mjs"
+		],
+		"overrides": [
+			{
+				"files": "fixtures/*.js",
+				"rules": {
+					"import/no-unresolved": "off"
+				}
+			}
 		]
 	}
 }

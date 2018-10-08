@@ -46,56 +46,56 @@ test('exports a function', t => {
 });
 
 test('emits error on invalid opts', async t => {
-	await t.throws(testRollup());
-	await t.throws(testRollup({}));
-	await t.throws(testRollup({
+	await t.throwsAsync(testRollup());
+	await t.throwsAsync(testRollup({}));
+	await t.throwsAsync(testRollup({
 		rollup: {}
 	}));
-	await t.throws(testRollup({
+	await t.throwsAsync(testRollup({
 		rollup: {
 			input: 'test.js',
 			output: {file: null}
 		}
 	}));
-	await t.throws(testRollup({
+	await t.throwsAsync(testRollup({
 		rollup: {
 			input: 'test.js',
 			output: {file: null}
 		}
 	}));
-	await t.throws(testRollup({
+	await t.throwsAsync(testRollup({
 		rollup: {
 			input: []
 		}
 	}));
-	await t.throws(testRollup({
+	await t.throwsAsync(testRollup({
 		rollup: {
 			input: [null, 'input.js']
 		}
 	}));
-	await t.throws(testRollup({
+	await t.throwsAsync(testRollup({
 		rollup: {
 			input: ['input.js', 'input2.js'],
 			output: {file: null}
 		}
 	}));
-	await t.throws(testRollup({
+	await t.throwsAsync(testRollup({
 		modulePath: 5,
 		rollup: {
 			input: 'red.js'
 		}
 	}));
-	await t.throws(testRollup({
+	await t.throwsAsync(testRollup({
 		rollup: {
 			input: 'file-not-found.js'
 		}
 	}));
-	await t.throws(testRollup({
+	await t.throwsAsync(testRollup({
 		rollup: {
 			input: 'fixtures/invalid-import.js'
 		}
 	}));
-	await t.throws(testRollup({
+	await t.throwsAsync(testRollup({
 		rollup: {
 			input: 'fixtures/input1.js',
 			output: [
@@ -104,7 +104,7 @@ test('emits error on invalid opts', async t => {
 			]
 		}
 	}));
-	await t.throws(testRollup({
+	await t.throwsAsync(testRollup({
 		rollup: {
 			input: 'fixtures/input1.js',
 			output: {
@@ -124,7 +124,7 @@ test('valid file', async t => {
 			}
 		}
 	};
-	await t.notThrows(testRollup(opts, concatSnapshot(t)));
+	await t.notThrowsAsync(testRollup(opts, concatSnapshot(t)));
 });
 
 test('valid file with sourcemaps enabled', async t => {
@@ -137,7 +137,7 @@ test('valid file with sourcemaps enabled', async t => {
 			}
 		}
 	};
-	await t.notThrows(testRollup(opts, concatSnapshot(t)));
+	await t.notThrowsAsync(testRollup(opts, concatSnapshot(t)));
 });
 
 test('compatible with gulp-sourcemaps', async t => {
@@ -150,7 +150,7 @@ test('compatible with gulp-sourcemaps', async t => {
 			}
 		}
 	};
-	await t.notThrows(testRollup(opts, sourcemaps.init(), sourcemaps.write('.'), concatSnapshot(t)));
+	await t.notThrowsAsync(testRollup(opts, sourcemaps.init(), sourcemaps.write('.'), concatSnapshot(t)));
 });
 
 test('module import and license files only', async t => {
@@ -171,7 +171,7 @@ test('module import and license files only', async t => {
 		},
 		modulePath: 'fixtures/fake-node-modules'
 	};
-	await t.notThrows(testRollup(opts, concatSnapshot(t)));
+	await t.notThrowsAsync(testRollup(opts, concatSnapshot(t)));
 });
 
 test('module import and copy all files', async t => {
@@ -194,7 +194,7 @@ test('module import and copy all files', async t => {
 		copyModules: true
 	};
 
-	await t.notThrows(testRollup(opts, concatSnapshot(t)));
+	await t.notThrowsAsync(testRollup(opts, concatSnapshot(t)));
 });
 
 test('module import and copy all files with vinylOpts', async t => {
@@ -220,7 +220,7 @@ test('module import and copy all files with vinylOpts', async t => {
 		copyModules: true
 	};
 
-	await t.notThrows(testRollup(opts, concatSnapshot(t)));
+	await t.notThrowsAsync(testRollup(opts, concatSnapshot(t)));
 });
 
 test('module import with no copy', async t => {
@@ -243,7 +243,7 @@ test('module import with no copy', async t => {
 		copyModules: false
 	};
 
-	await t.notThrows(testRollup(opts, concatSnapshot(t)));
+	await t.notThrowsAsync(testRollup(opts, concatSnapshot(t)));
 });
 
 test('multiple output files', async t => {
@@ -265,5 +265,5 @@ test('multiple output files', async t => {
 		modulePath: 'fixtures/fake-node-modules'
 	};
 
-	await t.notThrows(testRollup(opts, concatSnapshot(t)));
+	await t.notThrowsAsync(testRollup(opts, concatSnapshot(t)));
 });

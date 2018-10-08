@@ -43,7 +43,7 @@ function processOutput(output, input) {
 		};
 
 		if (typeof entry.file !== 'string') {
-			throw new TypeError(`output.file must be a string.`);
+			throw new TypeError('output.file must be a string.');
 		}
 
 		if (outputList.has(entry.file)) {
@@ -130,8 +130,8 @@ async function runRollup(opts, merged) {
 function vinylRollup(opts) {
 	const merged = merge2();
 
-	runRollup(opts, merged).catch(err => {
-		merged.emit('error', err);
+	runRollup(opts, merged).catch(error => {
+		merged.emit('error', error);
 	});
 
 	return merged;

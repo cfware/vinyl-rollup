@@ -36,7 +36,7 @@
 	"dependencies": {
 		"arrify": "^1.0.1",
 		"gulp": "^4.0.0",
-		"merge2": "^1.2.2",
+		"merge2": "^1.2.3",
 		"p-map": "^2.0.0",
 		"vinyl": "^2.2.0",
 		"vinyl-fs": "^3.0.3"
@@ -45,7 +45,7 @@
 		"@babel/cli": "^7.0.0",
 		"@babel/preset-env": "^7.0.0",
 		"@babel/register": "^7.0.0",
-		"ava": "^1.0.0-beta.8",
+		"ava": "^1.0.0-rc.2",
 		"babel-plugin-istanbul": "^5.1.0",
 		"concat-stream": "^1.6.2",
 		"cpy-cli": "^2.0.0",
@@ -54,12 +54,12 @@
 		"nyc": "^13.1.0",
 		"p-event": "^2.1.0",
 		"pump": "^3.0.0",
-		"rollup": "^0.66.4",
+		"rollup": "^0.67.3",
 		"rollup-plugin-node-resolve": "^3.4.0",
 		"xo": "^0.23.0"
 	},
 	"peerDependencies": {
-		"rollup": "^0.66.4"
+		"rollup": "^0.67.3"
 	},
 	"nyc": {
 		"instrument": false,

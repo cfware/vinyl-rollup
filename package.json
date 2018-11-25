@@ -1,6 +1,6 @@
 {
 	"name": "vinyl-rollup",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "A wrapper for rollup that produces a stream of Vinyl objects.",
 	"main": "index.js",
 	"module": "index.esm.js",

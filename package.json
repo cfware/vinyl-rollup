@@ -38,28 +38,25 @@
 		"gulp": "^4.0.0",
 		"merge2": "^1.2.3",
 		"p-map": "^2.0.0",
+		"rollup": "^0.68.2",
 		"vinyl": "^2.2.0",
 		"vinyl-fs": "^3.0.3"
 	},
 	"devDependencies": {
-		"@babel/cli": "^7.0.0",
-		"@babel/preset-env": "^7.0.0",
+		"@babel/cli": "^7.2.3",
+		"@babel/preset-env": "^7.2.3",
 		"@babel/register": "^7.0.0",
-		"ava": "^1.0.0-rc.2",
+		"ava": "^1.0.1",
 		"babel-plugin-istanbul": "^5.1.0",
-		"concat-stream": "^1.6.2",
+		"concat-stream": "^2.0.0",
 		"cpy-cli": "^2.0.0",
 		"del-cli": "^1.1.0",
 		"gulp-sourcemaps": "^2.6.4",
 		"nyc": "^13.1.0",
 		"p-event": "^2.1.0",
 		"pump": "^3.0.0",
-		"rollup": "^0.67.3",
-		"rollup-plugin-node-resolve": "^3.4.0",
+		"rollup-plugin-node-resolve": "^4.0.0",
 		"xo": "^0.23.0"
-	},
-	"peerDependencies": {
-		"rollup": "^0.67.3"
 	},
 	"nyc": {
 		"instrument": false,

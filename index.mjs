@@ -59,7 +59,8 @@ async function runBundle(bundle, entry) {
 
 	delete rollupConfig.vinylOpts;
 
-	const {code, map} = await bundle.generate(rollupConfig);
+	const {output} = await bundle.generate(rollupConfig);
+	const {code, map} = output[0];
 	const vinylOpts = {
 		...(entry.vinylOpts || {}),
 		path: entry.file,
@@ -74,7 +75,6 @@ async function runBundle(bundle, entry) {
 }
 
 async function runRollup(opts, merged) {
-	const {copyModules} = opts;
 	const {input} = opts.rollup;
 
 	if (typeof input !== 'string') {
@@ -87,21 +87,21 @@ async function runRollup(opts, merged) {
 		throw new TypeError('opts.modulePath must be a string if defined');
 	}
 
-	if (!['undefined', 'boolean'].includes(typeof copyModules)) {
+	if (!['undefined', 'boolean'].includes(typeof opts.copyModules)) {
 		throw new TypeError('opts.copyModules must be a boolean if defined');
 	}
 
 	const bundle = await rollup(opts.rollup);
 	const results = await pMap(output, entry => runBundle(bundle, entry), {concurrency: 1});
 
-	if (copyModules !== false) {
+	if (opts.copyModules !== false) {
 		const modulePath = path.resolve(opts.modulePath || 'node_modules');
-		const modules = bundleModuleNames(bundle.modules, modulePath);
+		const modules = bundleModuleNames(bundle.cache.modules, modulePath);
 		const casedGlob = [];
 		const uncasedGlob = [];
 		const base = '.';
 
-		if (copyModules === true) {
+		if (opts.copyModules === true) {
 			casedGlob.push(...modules.map(mod => path.join(modulePath, mod, '**')));
 		} else {
 			/* Include package.json and LICENSE files by default. */

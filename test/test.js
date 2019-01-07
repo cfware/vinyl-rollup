@@ -1,9 +1,11 @@
 import test from 'ava';
 
+import path from 'path';
 import pEvent from 'p-event';
 import pump from 'pump';
 import concat from 'concat-stream';
 import rollupResolve from 'rollup-plugin-node-resolve';
+import rollupBabel from 'rollup-plugin-babel';
 import sourcemaps from 'gulp-sourcemaps';
 
 import vinylRollup from '..';
@@ -27,10 +29,20 @@ function vinylSort(a, b) {
 	return 0;
 }
 
+const normalizeCRLF = str => str.replace(/\r\n/g, '\n').replace(/\\r\\n/g, '\\n');
+
 function vinylSnapshot({contents, relative, sourceMap}) {
+	if (sourceMap) {
+		sourceMap = {
+			...sourceMap,
+			sourcesContent: sourceMap.sourcesContent.map(content => normalizeCRLF(content))
+		};
+	}
+
 	return {
-		contents: contents.toString(),
-		relative,
+		contents: normalizeCRLF(contents.toString()),
+		// Coerse Windows relative paths to posix format.
+		relative: relative.replace(/\\/g, '/'),
 		sourceMap
 	};
 }
@@ -99,8 +111,8 @@ test('emits error on invalid opts', async t => {
 		rollup: {
 			input: 'fixtures/input1.js',
 			output: [
-				{format: 'es'},
-				{format: 'es'}
+				{format: 'esm'},
+				{format: 'esm'}
 			]
 		}
 	}));
@@ -108,7 +120,7 @@ test('emits error on invalid opts', async t => {
 		rollup: {
 			input: 'fixtures/input1.js',
 			output: {
-				format: 'es'
+				format: 'esm'
 			}
 		},
 		copyModules: 'purple'
@@ -120,7 +132,7 @@ test('valid file', async t => {
 		rollup: {
 			input: 'fixtures/input1.js',
 			output: {
-				format: 'es'
+				format: 'esm'
 			}
 		}
 	};
@@ -132,7 +144,7 @@ test('valid file with sourcemaps enabled', async t => {
 		rollup: {
 			input: 'fixtures/input1.js',
 			output: {
-				format: 'es',
+				format: 'esm',
 				sourcemap: true
 			}
 		}
@@ -145,7 +157,7 @@ test('compatible with gulp-sourcemaps', async t => {
 		rollup: {
 			input: 'fixtures/input1.js',
 			output: {
-				format: 'es',
+				format: 'esm',
 				sourcemap: true
 			}
 		}
@@ -158,18 +170,24 @@ test('module import and license files only', async t => {
 		rollup: {
 			input: 'fixtures/import-module.js',
 			output: {
-				format: 'es',
+				format: 'esm',
 				sourcemap: true
 			},
 			plugins: [
-				rollupResolve({
-					customResolveOptions: {
-						moduleDirectory: 'fixtures/fake-node-modules'
-					}
+				rollupBabel({
+					babelrc: false,
+					configFile: false,
+					plugins: [
+						['bare-import-rewrite', {
+							rootPath: path.resolve('fixtures'),
+							modulesDir: path.resolve('fixtures/node_modules'),
+							fsPath: true
+						}]
+					]
 				})
 			]
 		},
-		modulePath: 'fixtures/fake-node-modules'
+		modulePath: path.resolve('fixtures/node_modules')
 	};
 	await t.notThrowsAsync(testRollup(opts, concatSnapshot(t)));
 });
@@ -179,18 +197,23 @@ test('module import and copy all files', async t => {
 		rollup: {
 			input: 'fixtures/import-module.js',
 			output: {
-				format: 'es',
+				format: 'esm',
 				sourcemap: true
 			},
 			plugins: [
-				rollupResolve({
-					customResolveOptions: {
-						moduleDirectory: 'fixtures/fake-node-modules'
-					}
+				rollupBabel({
+					babelrc: false,
+					configFile: false,
+					plugins: [
+						['bare-import-rewrite', {
+							rootPath: 'fixtures',
+							modulesDir: 'fixtures/node_modules'
+						}]
+					]
 				})
 			]
 		},
-		modulePath: 'fixtures/fake-node-modules',
+		modulePath: 'fixtures/node_modules',
 		copyModules: true
 	};
 
@@ -202,7 +225,7 @@ test('module import and copy all files with vinylOpts', async t => {
 		rollup: {
 			input: 'fixtures/import-module.js',
 			output: {
-				format: 'es',
+				format: 'esm',
 				sourcemap: true,
 				vinylOpts: {
 					base: 'fixtures'
@@ -211,12 +234,12 @@ test('module import and copy all files with vinylOpts', async t => {
 			plugins: [
 				rollupResolve({
 					customResolveOptions: {
-						moduleDirectory: 'fixtures/fake-node-modules'
+						moduleDirectory: 'fixtures/node_modules'
 					}
 				})
 			]
 		},
-		modulePath: 'fixtures/fake-node-modules',
+		modulePath: 'fixtures/node_modules',
 		copyModules: true
 	};
 
@@ -228,18 +251,18 @@ test('module import with no copy', async t => {
 		rollup: {
 			input: 'fixtures/import-module.js',
 			output: {
-				format: 'es',
+				format: 'esm',
 				sourcemap: true
 			},
 			plugins: [
 				rollupResolve({
 					customResolveOptions: {
-						moduleDirectory: 'fixtures/fake-node-modules'
+						moduleDirectory: 'fixtures/node_modules'
 					}
 				})
 			]
 		},
-		modulePath: 'fixtures/fake-node-modules',
+		modulePath: 'fixtures/node_modules',
 		copyModules: false
 	};
 
@@ -251,18 +274,18 @@ test('multiple output files', async t => {
 		rollup: {
 			input: 'fixtures/import-module.js',
 			output: [
-				{file: 'fixtures/import-module.mjs', format: 'es', sourcemap: true},
+				{file: 'fixtures/import-module.mjs', format: 'esm', sourcemap: true},
 				{file: 'fixtures/import-module.js', format: 'cjs', sourcemap: true}
 			],
 			plugins: [
 				rollupResolve({
 					customResolveOptions: {
-						moduleDirectory: 'fixtures/fake-node-modules'
+						moduleDirectory: 'fixtures/node_modules'
 					}
 				})
 			]
 		},
-		modulePath: 'fixtures/fake-node-modules'
+		modulePath: 'fixtures/node_modules'
 	};
 
 	await t.notThrowsAsync(testRollup(opts, concatSnapshot(t)));

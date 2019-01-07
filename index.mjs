@@ -17,7 +17,7 @@ function bundleModuleNames(modules, modulePath) {
 		Object.values(mod.resolvedIds).forEach(absid => {
 			const id = path.relative(modulePath, absid);
 			if (id[0] !== '.') {
-				const webmod = id.split('/', id[0] === '@' ? 2 : 1).join('/');
+				const webmod = id.split(path.sep, id[0] === '@' ? 2 : 1).join(path.sep);
 
 				webSet.add(webmod);
 			}

@@ -49,6 +49,7 @@ function processOutput(output, input) {
 		if (outputList.has(entry.file)) {
 			throw new TypeError(`Cannot output to the same file multiple times: ${entry.file}`);
 		}
+
 		outputList.add(entry.file);
 		return entry;
 	});

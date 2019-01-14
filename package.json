@@ -59,7 +59,7 @@
 		"pump": "^3.0.0",
 		"rollup-plugin-babel": "^4.2.0",
 		"rollup-plugin-node-resolve": "^4.0.0",
-		"xo": "^0.23.0"
+		"xo": "^0.24.0"
 	},
 	"nyc": {
 		"instrument": false,

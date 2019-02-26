@@ -10,18 +10,28 @@ import arrify from 'arrify';
 import pMap from 'p-map';
 import merge2 from 'merge2';
 
+function bundleGetSourceList(modules) {
+	const files = new Set();
+
+	modules.forEach(mod => {
+		Object.values(mod.resolvedIds).forEach(({id}) => {
+			files.add(id);
+		});
+	});
+
+	return files;
+}
+
 function bundleModuleNames(modules, modulePath) {
 	const webSet = new Set();
 
-	modules.forEach(mod => {
-		Object.values(mod.resolvedIds).forEach(absid => {
-			const id = path.relative(modulePath, absid);
-			if (id[0] !== '.') {
-				const webmod = id.split(path.sep, id[0] === '@' ? 2 : 1).join(path.sep);
+	bundleGetSourceList(modules).forEach(source => {
+		const id = path.relative(modulePath, source);
+		if (!(id.startsWith('.') || id.startsWith('node_modules'))) {
+			const webmod = id.split(path.sep, id[0] === '@' ? 2 : 1).join(path.sep);
 
-				webSet.add(webmod);
-			}
-		});
+			webSet.add(webmod);
+		}
 	});
 
 	return [...webSet];

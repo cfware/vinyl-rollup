@@ -7,6 +7,7 @@
 	"scripts": {
 		"prepack": "babel --out-file index.js --source-maps true index.mjs && cpy --rename=index.esm.js index.mjs . && npm run test:actual",
 		"test": "del-cli index.js index.js.map && nyc npm run test:actual",
+		"release": "standard-version --sign",
 		"test:actual": "xo && ava"
 	},
 	"engines": {
@@ -59,6 +60,7 @@
 		"pump": "^3.0.0",
 		"rollup-plugin-babel": "^4.2.0",
 		"rollup-plugin-node-resolve": "^4.0.0",
+		"standard-version": "^5.0.0",
 		"xo": "^0.24.0"
 	},
 	"nyc": {

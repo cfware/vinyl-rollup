@@ -108,24 +108,23 @@ async function runRollup(opts, merged) {
 	if (opts.copyModules !== false) {
 		const modulePath = path.resolve(opts.modulePath || 'node_modules');
 		const modules = bundleModuleNames(bundle.cache.modules, modulePath);
-		const casedGlob = [];
-		const uncasedGlob = [];
 		const base = '.';
 
 		if (opts.copyModules === true) {
-			casedGlob.push(...modules.map(mod => path.join(modulePath, mod, '**')));
-		} else {
+			modules.forEach(mod => {
+				const globs = [
+					path.join(modulePath, mod, '**'),
+					'!' + path.join(modulePath, mod, 'node_modules/**')
+				];
+				merged.add(vfs.src(globs, {base, nodir: true}));
+			});
+		} else if (modules.length > 0) {
 			/* Include package.json and LICENSE files by default. */
-			casedGlob.push(...modules.map(mod => path.join(modulePath, mod, 'package.json')));
-			uncasedGlob.push(...modules.map(mod => path.join(modulePath, mod, 'licen{s,c}e*')));
-		}
+			const casedGlobs = modules.map(mod => path.join(modulePath, mod, 'package.json'));
+			const uncasedGlobs = modules.map(mod => path.join(modulePath, mod, 'licen{s,c}e*'));
 
-		if (casedGlob.length > 0) {
-			merged.add(vfs.src(casedGlob, {base, nodir: true}));
-		}
-
-		if (uncasedGlob.length > 0) {
-			merged.add(vfs.src(uncasedGlob, {base, nocase: true}));
+			merged.add(vfs.src(casedGlobs, {base, nodir: true}));
+			merged.add(vfs.src(uncasedGlobs, {base, nocase: true}));
 		}
 	}
 

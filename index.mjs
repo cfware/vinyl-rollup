@@ -6,7 +6,6 @@ import {PassThrough} from 'stream';
 import {rollup} from 'rollup';
 import vfs from 'vinyl-fs';
 import Vinyl from 'vinyl';
-import arrify from 'arrify';
 import pMap from 'p-map';
 import merge2 from 'merge2';
 
@@ -46,7 +45,7 @@ function processOutput(output, input) {
 	}
 
 	const outputList = new Set();
-	return arrify(output).map(entry => {
+	return [].concat(output).map(entry => {
 		entry = {
 			file: input,
 			...entry

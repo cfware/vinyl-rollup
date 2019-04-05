@@ -35,7 +35,6 @@
 	},
 	"homepage": "https://github.com/cfware/vinyl-rollup#readme",
 	"dependencies": {
-		"arrify": "^1.0.1",
 		"gulp": "^4.0.0",
 		"merge2": "^1.2.3",
 		"p-map": "^2.0.0",

@@ -52,7 +52,7 @@
 		"babel-plugin-istanbul": "^5.1.0",
 		"concat-stream": "^2.0.0",
 		"cpy-cli": "^2.0.0",
-		"del-cli": "^1.1.0",
+		"del-cli": "^2.0.0",
 		"gulp-sourcemaps": "^2.6.4",
 		"nyc": "^14.0.0",
 		"p-event": "^4.0.0",

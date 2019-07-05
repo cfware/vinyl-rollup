@@ -1,14 +1,13 @@
-import test from 'ava';
-
 import path from 'path';
+
+import test from 'ava';
 import pEvent from 'p-event';
 import pump from 'pump';
 import concat from 'concat-stream';
-import rollupResolve from 'rollup-plugin-node-resolve';
 import rollupBabel from 'rollup-plugin-babel';
 import sourcemaps from 'gulp-sourcemaps';
 
-import vinylRollup from '..';
+import vinylRollup from '../index.js';
 
 function testRollup(opts, ...pumps) {
 	const vinyl = vinylRollup(opts);
@@ -30,6 +29,17 @@ function vinylSort(a, b) {
 }
 
 const normalizeCRLF = str => str.replace(/\r\n/g, '\n').replace(/\\r\\n/g, '\\n');
+
+const babelrcRelativeResolver = {
+	babelrc: false,
+	configFile: false,
+	plugins: [
+		['bare-import-rewrite', {
+			rootPath: 'fixtures',
+			modulesDir: 'fixtures/node_modules'
+		}]
+	]
+};
 
 function vinylSnapshot({contents, relative, sourceMap}) {
 	if (sourceMap) {
@@ -201,16 +211,7 @@ test('module import and copy all files', async t => {
 				sourcemap: true
 			},
 			plugins: [
-				rollupBabel({
-					babelrc: false,
-					configFile: false,
-					plugins: [
-						['bare-import-rewrite', {
-							rootPath: 'fixtures',
-							modulesDir: 'fixtures/node_modules'
-						}]
-					]
-				})
+				rollupBabel(babelrcRelativeResolver)
 			]
 		},
 		modulePath: 'fixtures/node_modules',
@@ -232,11 +233,7 @@ test('module import and copy all files with vinylOpts', async t => {
 				}
 			},
 			plugins: [
-				rollupResolve({
-					customResolveOptions: {
-						moduleDirectory: 'fixtures/node_modules'
-					}
-				})
+				rollupBabel(babelrcRelativeResolver)
 			]
 		},
 		modulePath: 'fixtures/node_modules',
@@ -255,11 +252,7 @@ test('module import with no copy', async t => {
 				sourcemap: true
 			},
 			plugins: [
-				rollupResolve({
-					customResolveOptions: {
-						moduleDirectory: 'fixtures/node_modules'
-					}
-				})
+				rollupBabel(babelrcRelativeResolver)
 			]
 		},
 		modulePath: 'fixtures/node_modules',
@@ -278,11 +271,7 @@ test('multiple output files', async t => {
 				{file: 'fixtures/import-module.js', format: 'cjs', sourcemap: true}
 			],
 			plugins: [
-				rollupResolve({
-					customResolveOptions: {
-						moduleDirectory: 'fixtures/node_modules'
-					}
-				})
+				rollupBabel(babelrcRelativeResolver)
 			]
 		},
 		modulePath: 'fixtures/node_modules'

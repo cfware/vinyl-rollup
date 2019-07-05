@@ -10,44 +10,22 @@ A wrapper for rollup that produces a stream of Vinyl objects.
 
 ## Install vinyl-rollup
 
-This module requires node.js 8 or above.
-
-```sh
-npm i -D rollup vinyl-rollup gulp@4
-```
+This module requires node.js 8 or above.  All testing is done using the `esm` loader.
 
 ## Usage
 
-This example shows use of babel with gulp4.  Though babel is not required
-it allows us to import the standard `rollup.config.js` which is an ES module.
-In the [future](https://github.com/gulpjs/interpret/commit/7205800a195d14b2e31de82287858826ef85df10)
-it will be possible to use gulpfile.esm.js.
+This example shows use of esm with gulp.
 
 ```js
-npm i -D rollup vinyl-rollup gulp@4 pump @babel/core @babel/register @babel/preset-env
+npm i -D rollup vinyl-rollup gulp pump esm
 ```
 
-Create `babel.config.js` with the `@babel/env` option `targets.node` set to the
-lowest major version you support.
-
-```js
-'use strict';
-
-module.exports = {
-	presets: [['@babel/env', {
-		targets: {
-			node: 6
-		}
-	}]]
-};
-```
-
-Create `gulpfile.babel.js`.
+Create `gulpfile.esm.js`.
 ```js
 import gulp from 'gulp';
 import pump from 'pump';
 import vinylRollup from 'vinyl-rollup';
-import rollupConfig from './rollup.config';
+import rollupConfig from './rollup.config.js';
 
 export function build() {
 	return pump(

@@ -30,7 +30,7 @@
 	"dependencies": {
 		"gulp": "^4.0.2",
 		"merge2": "^1.2.3",
-		"p-map": "^2.1.0",
+		"p-map": "^3.0.0",
 		"rollup": "^1.16.6",
 		"vinyl": "^2.2.0",
 		"vinyl-fs": "^3.0.3"

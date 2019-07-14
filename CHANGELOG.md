@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.6.1](https://github.com/cfware/vinyl-rollup/compare/v0.6.0...v0.6.1) (2019-07-14)
+
+
+### Bug Fixes
+
+* **package:** update p-map to version 3.0.0 ([#21](https://github.com/cfware/vinyl-rollup/issues/21)) ([2a06f5a](https://github.com/cfware/vinyl-rollup/commit/2a06f5a))
+
+
+
 ## [0.6.0](https://github.com/cfware/vinyl-rollup/compare/v0.5.1...v0.6.0) (2019-07-05)
 
 

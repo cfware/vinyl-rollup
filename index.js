@@ -9,22 +9,10 @@ import Vinyl from 'vinyl';
 import pMap from 'p-map';
 import merge2 from 'merge2';
 
-function bundleGetSourceList(modules) {
-	const files = new Set();
-
-	modules.forEach(mod => {
-		Object.values(mod.resolvedIds).forEach(({id}) => {
-			files.add(id);
-		});
-	});
-
-	return files;
-}
-
 function bundleModuleNames(modules, modulePath) {
 	const webSet = new Set();
 
-	bundleGetSourceList(modules).forEach(source => {
+	modules.forEach(source => {
 		const id = path.relative(modulePath, source);
 		if (!(id.startsWith('.') || id.startsWith('node_modules'))) {
 			const webmod = id.split(path.sep, id[0] === '@' ? 2 : 1).join(path.sep);
@@ -106,7 +94,7 @@ async function runRollup(opts, merged) {
 
 	if (opts.copyModules !== false) {
 		const modulePath = path.resolve(opts.modulePath || 'node_modules');
-		const modules = bundleModuleNames(bundle.cache.modules, modulePath);
+		const modules = bundleModuleNames(bundle.watchFiles, modulePath);
 		const base = '.';
 
 		if (opts.copyModules === true) {

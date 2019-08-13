@@ -29,16 +29,16 @@
 	"homepage": "https://github.com/cfware/vinyl-rollup#readme",
 	"dependencies": {
 		"gulp": "^4.0.2",
-		"merge2": "^1.2.3",
+		"merge2": "^1.2.4",
 		"p-map": "^3.0.0",
-		"rollup": "^1.16.6",
+		"rollup": "^1.19.4",
 		"vinyl": "^2.2.0",
 		"vinyl-fs": "^3.0.3"
 	},
 	"devDependencies": {
 		"@cfware/eslint-config-node": "^0.1.0",
 		"@cfware/nyc": "^0.5.0",
-		"ava": "^2.1.0",
+		"ava": "^2.2.0",
 		"babel-plugin-bare-import-rewrite": "^1.5.1",
 		"concat-stream": "^2.0.0",
 		"esm": "^3.2.25",

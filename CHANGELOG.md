@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.6.2](https://github.com/cfware/vinyl-rollup/compare/v0.6.1...v0.6.2) (2019-08-13)
+
+
+### Bug Fixes
+
+* Use official rollup API for bundled module names ([#24](https://github.com/cfware/vinyl-rollup/issues/24)) ([1227f59](https://github.com/cfware/vinyl-rollup/commit/1227f59))
+
 ### [0.6.1](https://github.com/cfware/vinyl-rollup/compare/v0.6.0...v0.6.1) (2019-07-14)
 
 

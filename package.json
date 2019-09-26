@@ -36,7 +36,7 @@
 		"vinyl-fs": "^3.0.3"
 	},
 	"devDependencies": {
-		"@cfware/eslint-config-node": "^0.1.0",
+		"@cfware/eslint-config-node": "^0.1.1",
 		"@cfware/nyc": "^0.5.0",
 		"ava": "^2.2.0",
 		"babel-plugin-bare-import-rewrite": "^1.5.1",
@@ -48,7 +48,7 @@
 		"pump": "^3.0.0",
 		"rollup-plugin-babel": "^4.3.3",
 		"standard-version": "^7.0.0",
-		"xo": "^0.24.0"
+		"xo": "^0.25.3"
 	},
 	"xo": {
 		"extends": "@cfware/eslint-config-node",

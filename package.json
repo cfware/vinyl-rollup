@@ -48,7 +48,7 @@
 		"pump": "^3.0.0",
 		"rollup-plugin-babel": "^4.3.3",
 		"standard-version": "^7.0.0",
-		"xo": "^0.24.0"
+		"xo": "^0.25.0"
 	},
 	"xo": {
 		"extends": "@cfware/eslint-config-node",

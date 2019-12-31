@@ -12,14 +12,14 @@ import merge2 from 'merge2';
 function bundleModuleNames(modules, modulePath) {
 	const webSet = new Set();
 
-	modules.forEach(source => {
+	for (const source of modules) {
 		const id = path.relative(modulePath, source);
 		if (!(id.startsWith('.') || id.startsWith('node_modules'))) {
 			const webmod = id.split(path.sep, id[0] === '@' ? 2 : 1).join(path.sep);
 
 			webSet.add(webmod);
 		}
-	});
+	}
 
 	return [...webSet];
 }
@@ -98,13 +98,13 @@ async function runRollup(opts, merged) {
 		const base = '.';
 
 		if (opts.copyModules === true) {
-			modules.forEach(mod => {
+			for (const mod of modules) {
 				const globs = [
 					path.join(modulePath, mod, '**'),
 					'!' + path.join(modulePath, mod, 'node_modules/**')
 				];
 				merged.add(vfs.src(globs, {base, nodir: true}));
-			});
+			}
 		} else if (modules.length > 0) {
 			/* Include package.json and LICENSE files by default. */
 			const casedGlobs = modules.map(mod => path.join(modulePath, mod, 'package.json'));
@@ -117,9 +117,9 @@ async function runRollup(opts, merged) {
 
 	const rollupStream = new PassThrough({objectMode: true});
 	merged.add(rollupStream);
-	results.forEach(vinyl => {
+	for (const vinyl of results) {
 		rollupStream.write(vinyl);
-	});
+	}
 
 	rollupStream.end();
 }

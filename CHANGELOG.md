@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.7.0](https://github.com/cfware/vinyl-rollup/compare/v0.6.2...v0.7.0) (2020-01-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* The `rollup.output.vinylOpts` option has been renamed to
+`rollup.output.vinylOptions`.
+* Use of this module through the user-space `esm` is no
+longer supported.
+
+### Features
+
+* Support node.js native ES module ([48dcd87](https://github.com/cfware/vinyl-rollup/commit/48dcd87d5bdb2a7a5bf301654cb7f0374b9f71bc))
+
 ### [0.6.2](https://github.com/cfware/vinyl-rollup/compare/v0.6.1...v0.6.2) (2019-08-13)
 
 

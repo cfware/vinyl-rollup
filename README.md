@@ -10,33 +10,41 @@ A wrapper for rollup that produces a stream of Vinyl objects.
 
 ## Install vinyl-rollup
 
-This module requires node.js 8 or above.  All testing is done using the `esm` loader.
+This is a native ES module.
 
 ## Usage
 
-This example shows use of esm with gulp.
+This example shows how to write a script which performs a vinyl-rollup based build.
+The `build` export of this script could also be used as a gulp task.
 
 ```js
-npm i -D rollup vinyl-rollup gulp pump esm
+npm i -D rollup vinyl-rollup vinyl-fs
 ```
 
-Create `gulpfile.esm.js`.
+Create `build.mjs`:
 ```js
-import gulp from 'gulp';
-import pump from 'pump';
+#!/usr/bin/env node
+import {pipeline} from 'stream';
+import {promisify} from 'util';
+
+import vinylFS from 'vinyl-fs';
 import vinylRollup from 'vinyl-rollup';
+
 import rollupConfig from './rollup.config.js';
 
-export function build() {
-	return pump(
-		vinylRollup({
-			rollup: rollupConfig,
-			copyModules: true,
-			modulePath: 'node_modules'
-		}),
-		gulp.dest('build', {sourcemaps: '.'})
-	);
-}
+export const build = () => promisify(pipeline)(
+	vinylRollup({
+		rollup: rollupConfig,
+		copyModules: true,
+		modulePath: 'node_modules'
+	}),
+	vinylFS.dest('build', {sourcemaps: '.'})
+);
+
+build().catch(error => {
+	console.error(error);
+	process.exit(1);
+});
 ```
 
 Create `rollup.config.js` for your application.  See the [rollup guide].
@@ -44,7 +52,7 @@ Create `rollup.config.js` for your application.  See the [rollup guide].
 ### Option `rollup`
 
 This object is used as the rollup configuration.  If `rollup.output.file` is missing
-it will be set to the value of `rollup.input`.  If `rollup.output.vinylOpts` is set
+it will be set to the value of `rollup.input`.  If `rollup.output.vinylOptions` is set
 it will be removed from the rollup output config and used as the default vinyl object
 options for the bundle output.  This does not effect creation vinyl objects created for
 the `copyModules` option.
@@ -66,14 +74,6 @@ Default value: `'node_modules'`.
 This is used by `copyModules`.  Each bundled source is checked against this path so the
 list of included external modules can be calculated.
 
-## Running tests
-
-Tests are provided by xo and ava.
-
-```sh
-npm install
-npm test
-```
 
 [npm-image]: https://img.shields.io/npm/v/vinyl-rollup.svg
 [npm-url]: https://npmjs.org/package/vinyl-rollup

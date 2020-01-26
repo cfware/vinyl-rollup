@@ -4,13 +4,17 @@
 	"description": "A wrapper for rollup that produces a stream of Vinyl objects.",
 	"scripts": {
 		"release": "standard-version --sign",
-		"test": "xo && nyc ava"
+		"pretest": "cfware-lint .",
+		"test": "c8 -r none node test/test.js | tap-yaml-summary",
+		"posttest": "c8 report"
 	},
 	"engines": {
-		"node": ">=8"
+		"node": ">=13.3.0"
 	},
 	"author": "Corey Farrell",
 	"license": "MIT",
+	"type": "module",
+	"main": "./index.js",
 	"keywords": [
 		"gulp",
 		"gulpplugin",
@@ -29,36 +33,20 @@
 	"homepage": "https://github.com/cfware/vinyl-rollup#readme",
 	"dependencies": {
 		"merge2": "^1.2.4",
-		"p-map": "^3.0.0",
 		"rollup": "^1.19.4",
 		"vinyl": "^2.2.0",
 		"vinyl-fs": "^3.0.3"
 	},
 	"devDependencies": {
-		"@cfware/eslint-config-node": "^0.1.1",
-		"@cfware/nyc": "^0.6.0",
-		"ava": "^2.2.0",
-		"babel-plugin-bare-import-rewrite": "^1.5.1",
+		"@babel/core": "^7.8.3",
+		"@cfware/lint": "^1.0.1",
+		"babel-plugin-bare-import-rewrite": "^2.0.0",
+		"c8": "^7.0.0",
 		"concat-stream": "^2.0.0",
-		"esm": "^3.2.25",
 		"gulp-sourcemaps": "^2.6.5",
-		"nyc": "^15.0.0",
-		"p-event": "^4.1.0",
-		"pump": "^3.0.0",
+		"libtap": "^0.2.0",
 		"rollup-plugin-babel": "^4.3.3",
 		"standard-version": "^7.0.0",
-		"xo": "^0.25.3"
-	},
-	"xo": {
-		"extends": "@cfware/eslint-config-node",
-		"overrides": [
-			{
-				"files": "fixtures/*.js",
-				"rules": {
-					"import/no-extraneous-dependencies": "off",
-					"import/no-unresolved": "off"
-				}
-			}
-		]
+		"tap-yaml-summary": "^0.1.0"
 	}
 }

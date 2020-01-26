@@ -1,19 +1,26 @@
 import path from 'path';
+import stream from 'stream';
+import {once} from 'events';
+import {promisify} from 'util';
 
-import test from 'ava';
-import pEvent from 'p-event';
-import pump from 'pump';
+import t from 'libtap';
 import concat from 'concat-stream';
 import rollupBabel from 'rollup-plugin-babel';
 import sourcemaps from 'gulp-sourcemaps';
 
 import vinylRollup from '../index.js';
 
-function testRollup(opts, ...pumps) {
-	const vinyl = vinylRollup(opts);
-	const emitter = pumps.length === 0 ? vinyl : pump(vinyl, ...pumps);
+const pipeline = promisify(stream.pipeline);
 
-	return pEvent(emitter, 'finish');
+function testRollup(options, ...pumps) {
+	const vinylStream = vinylRollup(options);
+	if (pumps.length === 0) {
+		return once(vinylStream, 'finished');
+	}
+
+	return pipeline(vinylStream,
+		...pumps
+	);
 }
 
 function vinylSort(a, b) {
@@ -28,7 +35,7 @@ function vinylSort(a, b) {
 	return 0;
 }
 
-const normalizeCRLF = str => str.replace(/\r\n/g, '\n').replace(/\\r\\n/g, '\\n');
+const normalizeCRLF = string => string.replace(/\r\n/gu, '\n').replace(/\\r\\n/gu, '\\n');
 
 const babelrcRelativeResolver = {
 	babelrc: false,
@@ -52,72 +59,72 @@ function vinylSnapshot({contents, relative, sourceMap}) {
 	return {
 		contents: normalizeCRLF(contents.toString()),
 		// Coerse Windows relative paths to posix format.
-		relative: relative.replace(/\\/g, '/'),
+		relative: relative.replace(/\\/gu, '/'),
 		sourceMap
 	};
 }
 
 function concatSnapshot(t) {
 	return concat(files => {
-		t.snapshot(files.map(vinylSnapshot).sort(vinylSort));
+		t.matchSnapshot(files.map(vinylSnapshot).sort(vinylSort));
 	});
 }
 
-test('exports a function', t => {
-	t.is(typeof vinylRollup, 'function');
+t.test('exports a function', async t => {
+	t.type(vinylRollup, 'function');
 });
 
-test('emits error on invalid opts', async t => {
-	await t.throwsAsync(testRollup());
-	await t.throwsAsync(testRollup({}));
-	await t.throwsAsync(testRollup({
+t.test('emits error on invalid options', async t => {
+	await t.rejects(testRollup());
+	await t.rejects(testRollup({}));
+	await t.rejects(testRollup({
 		rollup: {}
 	}));
-	await t.throwsAsync(testRollup({
+	await t.rejects(testRollup({
 		rollup: {
 			input: 'test.js',
 			output: {file: null}
 		}
 	}));
-	await t.throwsAsync(testRollup({
+	await t.rejects(testRollup({
 		rollup: {
 			input: 'test.js',
 			output: {file: null}
 		}
 	}));
-	await t.throwsAsync(testRollup({
+	await t.rejects(testRollup({
 		rollup: {
 			input: []
 		}
 	}));
-	await t.throwsAsync(testRollup({
+	await t.rejects(testRollup({
 		rollup: {
 			input: [null, 'input.js']
 		}
 	}));
-	await t.throwsAsync(testRollup({
+	await t.rejects(testRollup({
 		rollup: {
 			input: ['input.js', 'input2.js'],
 			output: {file: null}
 		}
 	}));
-	await t.throwsAsync(testRollup({
+	await t.rejects(testRollup({
 		modulePath: 5,
 		rollup: {
 			input: 'red.js'
 		}
 	}));
-	await t.throwsAsync(testRollup({
+	await t.rejects(testRollup({
 		rollup: {
 			input: 'file-not-found.js'
 		}
 	}));
-	await t.throwsAsync(testRollup({
+	await t.rejects(testRollup({
 		rollup: {
 			input: 'fixtures/invalid-import.js'
 		}
 	}));
-	await t.throwsAsync(testRollup({
+	await t.rejects(testRollup({
 		rollup: {
 			input: 'fixtures/input1.js',
 			output: [
@@ -126,7 +133,7 @@ test('emits error on invalid opts', async t => {
 			]
 		}
 	}));
-	await t.throwsAsync(testRollup({
+	await t.rejects(testRollup({
 		rollup: {
 			input: 'fixtures/input1.js',
 			output: {
@@ -137,8 +144,8 @@ test('emits error on invalid opts', async t => {
 	}));
 });
 
-test('valid file', async t => {
-	const opts = {
+t.test('valid file', async t => {
+	const options = {
 		rollup: {
 			input: 'fixtures/input1.js',
 			output: {
@@ -146,11 +153,11 @@ test('valid file', async t => {
 			}
 		}
 	};
-	await t.notThrowsAsync(testRollup(opts, concatSnapshot(t)));
+	await testRollup(options, concatSnapshot(t));
 });
 
-test('valid file with sourcemaps enabled', async t => {
-	const opts = {
+t.test('valid file with sourcemaps enabled', async t => {
+	const options = {
 		rollup: {
 			input: 'fixtures/input1.js',
 			output: {
@@ -159,11 +166,11 @@ test('valid file with sourcemaps enabled', async t => {
 			}
 		}
 	};
-	await t.notThrowsAsync(testRollup(opts, concatSnapshot(t)));
+	await testRollup(options, concatSnapshot(t));
 });
 
-test('compatible with gulp-sourcemaps', async t => {
-	const opts = {
+t.test('compatible with gulp-sourcemaps', async t => {
+	const options = {
 		rollup: {
 			input: 'fixtures/input1.js',
 			output: {
@@ -172,11 +179,11 @@ test('compatible with gulp-sourcemaps', async t => {
 			}
 		}
 	};
-	await t.notThrowsAsync(testRollup(opts, sourcemaps.init(), sourcemaps.write('.'), concatSnapshot(t)));
+	await testRollup(options, sourcemaps.init(), sourcemaps.write('.'), concatSnapshot(t));
 });
 
-test('module import and license files only', async t => {
-	const opts = {
+t.test('module import and license files only', async t => {
+	const options = {
 		rollup: {
 			input: 'fixtures/import-module.js',
 			output: {
@@ -199,11 +206,11 @@ test('module import and license files only', async t => {
 		},
 		modulePath: path.resolve('fixtures/node_modules')
 	};
-	await t.notThrowsAsync(testRollup(opts, concatSnapshot(t)));
+	await testRollup(options, concatSnapshot(t));
 });
 
-test('module import and copy all files', async t => {
-	const opts = {
+t.test('module import and copy all files', async t => {
+	const options = {
 		rollup: {
 			input: 'fixtures/import-module.js',
 			output: {
@@ -218,17 +225,17 @@ test('module import and copy all files', async t => {
 		copyModules: true
 	};
 
-	await t.notThrowsAsync(testRollup(opts, concatSnapshot(t)));
+	await testRollup(options, concatSnapshot(t));
 });
 
-test('module import and copy all files with vinylOpts', async t => {
-	const opts = {
+t.test('module import and copy all files with vinylOptions', async t => {
+	const options = {
 		rollup: {
 			input: 'fixtures/import-module.js',
 			output: {
 				format: 'esm',
 				sourcemap: true,
-				vinylOpts: {
+				vinylOptions: {
 					base: 'fixtures'
 				}
 			},
@@ -240,11 +247,11 @@ test('module import and copy all files with vinylOpts', async t => {
 		copyModules: true
 	};
 
-	await t.notThrowsAsync(testRollup(opts, concatSnapshot(t)));
+	await testRollup(options, concatSnapshot(t));
 });
 
-test('module import with no copy', async t => {
-	const opts = {
+t.test('module import with no copy', async t => {
+	const options = {
 		rollup: {
 			input: 'fixtures/import-module.js',
 			output: {
@@ -259,11 +266,11 @@ test('module import with no copy', async t => {
 		copyModules: false
 	};
 
-	await t.notThrowsAsync(testRollup(opts, concatSnapshot(t)));
+	await testRollup(options, concatSnapshot(t));
 });
 
-test('multiple output files', async t => {
-	const opts = {
+t.test('multiple output files', async t => {
+	const options = {
 		rollup: {
 			input: 'fixtures/import-module.js',
 			output: [
@@ -277,5 +284,5 @@ test('multiple output files', async t => {
 		modulePath: 'fixtures/node_modules'
 	};
 
-	await t.notThrowsAsync(testRollup(opts, concatSnapshot(t)));
+	await testRollup(options, concatSnapshot(t));
 });

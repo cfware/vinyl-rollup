@@ -1,0 +1,11 @@
+{
+	"overrides": [
+		{
+			"files": "fixtures/*.js",
+			"rules": {
+				"import/no-extraneous-dependencies": 0,
+				"import/no-unresolved": 0
+			}
+		}
+	]
+}

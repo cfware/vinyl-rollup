@@ -1,13 +1,12 @@
-'use strict';
-
 import path from 'path';
 import {PassThrough} from 'stream';
 
-import {rollup} from 'rollup';
+import _rollup from 'rollup';
 import vfs from 'vinyl-fs';
 import Vinyl from 'vinyl';
-import pMap from 'p-map';
 import merge2 from 'merge2';
+
+const {rollup} = _rollup;
 
 function bundleModuleNames(modules, modulePath) {
 	const webSet = new Set();
@@ -55,60 +54,64 @@ function processOutput(output, input) {
 async function runBundle(bundle, entry) {
 	const rollupConfig = {...entry};
 
-	delete rollupConfig.vinylOpts;
+	delete rollupConfig.vinylOptions;
 
 	const {output} = await bundle.generate(rollupConfig);
 	const {code, map} = output[0];
-	const vinylOpts = {
-		...(entry.vinylOpts || {}),
+	const vinylOptions = {
+		...(entry.vinylOptions || {}),
 		path: entry.file,
 		contents: Buffer.from(code)
 	};
 
 	if (map) {
-		vinylOpts.sourceMap = map;
+		vinylOptions.sourceMap = map;
 	}
 
-	return new Vinyl(vinylOpts);
+	return new Vinyl(vinylOptions);
 }
 
-async function runRollup(opts, merged) {
-	const {input} = opts.rollup;
+async function runRollup(options, merged) {
+	const {input} = options.rollup;
 
 	if (typeof input !== 'string') {
-		throw new TypeError('opts.rollup.input must be a string');
+		throw new TypeError('options.rollup.input must be a string');
 	}
 
-	const output = processOutput(opts.rollup.output, input);
+	const output = processOutput(options.rollup.output, input);
 
-	if (!['undefined', 'string'].includes(typeof opts.modulePath)) {
-		throw new TypeError('opts.modulePath must be a string if defined');
+	if (!['undefined', 'string'].includes(typeof options.modulePath)) {
+		throw new TypeError('options.modulePath must be a string if defined');
 	}
 
-	if (!['undefined', 'boolean'].includes(typeof opts.copyModules)) {
-		throw new TypeError('opts.copyModules must be a boolean if defined');
+	if (!['undefined', 'boolean'].includes(typeof options.copyModules)) {
+		throw new TypeError('options.copyModules must be a boolean if defined');
 	}
 
-	const bundle = await rollup(opts.rollup);
-	const results = await pMap(output, entry => runBundle(bundle, entry), {concurrency: 1});
+	const bundle = await rollup(options.rollup);
+	const results = [];
+	for (const entry of output) {
+		// eslint-disable-next-line no-await-in-loop
+		results.push(await runBundle(bundle, entry));
+	}
 
-	if (opts.copyModules !== false) {
-		const modulePath = path.resolve(opts.modulePath || 'node_modules');
+	if (options.copyModules !== false) {
+		const modulePath = path.resolve(options.modulePath || 'node_modules');
 		const modules = bundleModuleNames(bundle.watchFiles, modulePath);
 		const base = '.';
 
-		if (opts.copyModules === true) {
-			for (const mod of modules) {
+		if (options.copyModules === true) {
+			for (const module of modules) {
 				const globs = [
-					path.join(modulePath, mod, '**'),
-					'!' + path.join(modulePath, mod, 'node_modules/**')
+					path.join(modulePath, module, '**'),
+					`!${path.join(modulePath, module, 'node_modules/**')}`
 				];
 				merged.add(vfs.src(globs, {base, nodir: true}));
 			}
 		} else if (modules.length > 0) {
 			/* Include package.json and LICENSE files by default. */
-			const casedGlobs = modules.map(mod => path.join(modulePath, mod, 'package.json'));
-			const uncasedGlobs = modules.map(mod => path.join(modulePath, mod, 'licen{s,c}e*'));
+			const casedGlobs = modules.map(module => path.join(modulePath, module, 'package.json'));
+			const uncasedGlobs = modules.map(module => path.join(modulePath, module, 'licen{s,c}e*'));
 
 			merged.add(vfs.src(casedGlobs, {base, nodir: true}));
 			merged.add(vfs.src(uncasedGlobs, {base, nocase: true}));
@@ -124,10 +127,10 @@ async function runRollup(opts, merged) {
 	rollupStream.end();
 }
 
-function vinylRollup(opts) {
+function vinylRollup(options) {
 	const merged = merge2();
 
-	runRollup(opts, merged).catch(error => {
+	runRollup(options, merged).catch(error => {
 		merged.emit('error', error);
 	});
 

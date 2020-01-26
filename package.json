@@ -38,7 +38,7 @@
 		"@cfware/eslint-config-node": "^0.1.1",
 		"@cfware/nyc": "^0.6.0",
 		"ava": "^2.2.0",
-		"babel-plugin-bare-import-rewrite": "^1.5.1",
+		"babel-plugin-bare-import-rewrite": "^2.0.0",
 		"concat-stream": "^2.0.0",
 		"esm": "^3.2.25",
 		"gulp-sourcemaps": "^2.6.5",

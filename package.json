@@ -34,7 +34,7 @@
 	"homepage": "https://github.com/cfware/vinyl-rollup#readme",
 	"dependencies": {
 		"merge2": "^1.2.4",
-		"rollup": "^1.19.4",
+		"rollup": "^2.0.0",
 		"vinyl": "^2.2.0",
 		"vinyl-fs": "^3.0.3"
 	},

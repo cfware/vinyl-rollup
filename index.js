@@ -1,12 +1,10 @@
 import path from 'path';
 import {PassThrough} from 'stream';
 
-import _rollup from 'rollup';
+import {rollup} from 'rollup';
 import vfs from 'vinyl-fs';
 import Vinyl from 'vinyl';
 import merge2 from 'merge2';
-
-const {rollup} = _rollup;
 
 function bundleModuleNames(modules, modulePath) {
 	const webSet = new Set();

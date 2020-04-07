@@ -2,7 +2,7 @@
 coverage
 package
 .eslintrc.json
-.travis.yml
+.github
 fixtures
 tap-snapshots
 test

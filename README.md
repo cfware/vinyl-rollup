@@ -1,6 +1,6 @@
 # vinyl-rollup
 
-[![Travis CI][travis-image]][travis-url]
+![Tests][tests-status]
 [![Greenkeeper badge][gk-image]](https://greenkeeper.io/)
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
@@ -77,8 +77,7 @@ list of included external modules can be calculated.
 
 [npm-image]: https://img.shields.io/npm/v/vinyl-rollup.svg
 [npm-url]: https://npmjs.org/package/vinyl-rollup
-[travis-image]: https://travis-ci.org/cfware/vinyl-rollup.svg?branch=master
-[travis-url]: https://travis-ci.org/cfware/vinyl-rollup
+[tests-status]: https://github.com/cfware/vinyl-rollup/workflows/Tests/badge.svg
 [gk-image]: https://badges.greenkeeper.io/cfware/vinyl-rollup.svg
 [downloads-image]: https://img.shields.io/npm/dm/vinyl-rollup.svg
 [downloads-url]: https://npmjs.org/package/vinyl-rollup

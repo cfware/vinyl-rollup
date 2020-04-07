@@ -19,7 +19,7 @@ Array [
     "relative": "fixtures/input1.js",
     "sourceMap": Object {
       "file": "input1.js",
-      "mappings": "AAAA,YAAe,aAAa;;ACE5B,OAAO,CAAC,GAAG,CAAC,KAAK,CAAC,CAAC",
+      "mappings": "AAAA,YAAe,aAAa;;ACE5B,OAAO,CAAC,GAAG,CAAC,KAAK,CAAC",
       "names": Array [],
       "sourceRoot": undefined,
       "sources": Array [
@@ -39,11 +39,11 @@ Array [
     },
   },
   Object {
-    "contents": "{\\"version\\":3,\\"file\\":\\"input1.js\\",\\"sources\\":[\\"import1.js\\",\\"input1.js\\"],\\"sourcesContent\\":[\\"export default 'Hello World';\\\\n\\",\\"import value from './import1.js';\\\\n\\\\nconsole.log(value);\\\\n\\"],\\"names\\":[],\\"mappings\\":\\"AAAA,YAAe,aAAa;;ACE5B,OAAO,CAAC,GAAG,CAAC,KAAK,CAAC,CAAC\\"}",
+    "contents": "{\\"version\\":3,\\"file\\":\\"input1.js\\",\\"sources\\":[\\"import1.js\\",\\"input1.js\\"],\\"sourcesContent\\":[\\"export default 'Hello World';\\\\n\\",\\"import value from './import1.js';\\\\n\\\\nconsole.log(value);\\\\n\\"],\\"names\\":[],\\"mappings\\":\\"AAAA,YAAe,aAAa;;ACE5B,OAAO,CAAC,GAAG,CAAC,KAAK,CAAC\\"}",
     "relative": "fixtures/input1.js.map",
     "sourceMap": Object {
       "file": "input1.js",
-      "mappings": "AAAA,YAAe,aAAa;;ACE5B,OAAO,CAAC,GAAG,CAAC,KAAK,CAAC,CAAC",
+      "mappings": "AAAA,YAAe,aAAa;;ACE5B,OAAO,CAAC,GAAG,CAAC,KAAK,CAAC",
       "names": Array [],
       "sourceRoot": undefined,
       "sources": Array [
@@ -479,7 +479,7 @@ Array [
     "relative": "fixtures/input1.js",
     "sourceMap": Object {
       "file": "input1.js",
-      "mappings": "AAAA,YAAe,aAAa;;ACE5B,OAAO,CAAC,GAAG,CAAC,KAAK,CAAC,CAAC",
+      "mappings": "AAAA,YAAe,aAAa;;ACE5B,OAAO,CAAC,GAAG,CAAC,KAAK,CAAC",
       "names": Array [],
       "sources": Array [
         "import1.js",
